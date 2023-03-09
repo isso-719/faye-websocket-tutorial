@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+  web:
+    build: .
+    command: bundle exec ruby app.rb -o 0.0.0.0
+    ports:
+      - 8080:4567
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - RACK_ENV=development
