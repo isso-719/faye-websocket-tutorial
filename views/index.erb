@@ -8,6 +8,43 @@
     <title>Chat</title>
 </head>
 <body>
-    <h1>Hello World!</h1>
+    <input type="text" name="username" placeholder="username" />
+    <input type="text" name="message" placeholder="message" />
+    <button>送信</button>
+
+    <div id="messages"></div>
+
+
+    <script>
+      if (location.protocol === 'https:') {
+        var ws = new WebSocket('wss://' + location.host + '/websocket');
+      } else {
+        var ws = new WebSocket('ws://' + location.host + '/websocket');
+      }
+
+      ws.onopen = function() {
+        console.log('connected');
+      };
+
+      ws.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = document.createElement('div');
+        message.innerHTML = '<strong>' + data.username + '</strong>: ' + data.message;
+        document.querySelector('#messages').appendChild(message);
+      };
+
+      ws.onclose = function() {
+        console.log('disconnected');
+      };
+
+      document.querySelector('button').addEventListener('click', function() {
+        var username = document.querySelector('input[name="username"]').value;
+        var message = document.querySelector('input[name="message"]').value;
+        ws.send(JSON.stringify({
+          username: username,
+          message: message
+        }));
+      });
+    </script>
 </body>
 </html>
