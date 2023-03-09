@@ -23,6 +23,7 @@ get '/websocket' do
 
     ws.on :close do |event|
       ws = nil
+      settings.sockets.delete(ws)
     end
 
     ws.rack_response
