@@ -18,7 +18,9 @@ get '/websocket' do
     end
 
     ws.on :message do |event|
-      ws.send(event.data)
+      settings.sockets.each do |socket|
+        socket.send(event.data)
+      end
     end
 
     ws.on :close do |event|
